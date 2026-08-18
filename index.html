@@ -260,12 +260,12 @@
 
           <button
             id="techdomCardBtn"
-            class="card__btn card__btn--disabled"
+            class="card__btn card__btn--preview"
             type="button"
-            disabled
-            aria-disabled="true"
+            aria-haspopup="dialog"
+            aria-controls="techdomModal"
           >
-            Coming soon
+            See what's coming ♡
           </button>
         </article>
       </div>
@@ -288,6 +288,61 @@
       </nav>
     </div>
   </footer>
+
+  <!-- ============ TECHDOM SNEAK-PEEK MODAL ============ -->
+  <!-- Hidden by default; opened by script.js when the Techdom card is clicked.
+       Shows the two programs currently in development. Neither is live yet —
+       once techdomUrl is set in SITE_CONFIG, the card becomes a real link and
+       this preview no longer opens. -->
+  <div class="modal-overlay" id="techdomModalOverlay">
+    <div
+      class="modal"
+      id="techdomModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="techdomModalTitle"
+    >
+      <button class="modal__close" id="techdomModalClose" type="button" aria-label="Close">
+        &times;
+      </button>
+
+      <p class="modal__eyebrow">♡ techdom programs ♡</p>
+      <h2 id="techdomModalTitle" class="modal__title">What's coming</h2>
+      <p class="modal__intro">
+        Two programs currently in the works. Not live yet — here's a little taste.
+      </p>
+
+      <div class="modal__programs">
+        <article class="program-card">
+          <h3 class="program-card__title">Nico's Reign</h3>
+          <p class="program-card__status">
+            <span class="status-dot status-dot--soon" aria-hidden="true"></span>Coming soon
+          </p>
+          <p class="program-card__desc">
+            A Windows theming tool that lets Nico take over your PC.
+          </p>
+        </article>
+
+        <article class="program-card">
+          <h3 class="program-card__title">LuckySoles</h3>
+          <p class="program-card__status">
+            <span class="status-dot status-dot--soon" aria-hidden="true"></span>Coming soon
+          </p>
+          <img
+            src="LuckySolesPreview.png"
+            alt="Screenshot preview of the LuckySoles card-collecting app"
+            class="program-card__preview"
+            loading="lazy"
+            onerror="this.style.display='none'"
+          />
+          <p class="program-card__desc">
+            Collectible card game where you pull your favorite anime girls. Collect, upgrade,
+            and flex your ultimate waifu roster.
+          </p>
+        </article>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
