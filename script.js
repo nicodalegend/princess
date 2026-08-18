@@ -51,9 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSmoothScroll();
   setupReveal();
   setupParticles();
+  setupTechdomPreview();
 });
-
-// ---------- Apply SITE_CONFIG to every link/button on the page ----------
 function applyConfig() {
   // X — always live
   setActiveLink(["heroXLink", "xCardLink"], SITE_CONFIG.xUrl);
@@ -236,4 +235,60 @@ function setupParticles() {
   }
 
   field.appendChild(fragment);
+}
+
+// ---------- Techdom "sneak peek" modal ----------
+// The Techdom Programs card isn't live yet (no techdomUrl set), but clicking
+// it opens a preview of what's coming instead of doing nothing. Once a real
+// techdomUrl is added to SITE_CONFIG, unlockWhenReady() swaps the card over
+// to a real link and this preview stops opening (see the is-unlocked check
+// below), so nothing needs to be removed by hand later.
+function setupTechdomPreview() {
+  const card = document.getElementById("techdom-card");
+  const trigger = document.getElementById("techdomCardBtn");
+  const overlay = document.getElementById("techdomModalOverlay");
+  const closeBtn = document.getElementById("techdomModalClose");
+  if (!card || !overlay) return;
+
+  let lastFocused = null;
+
+  function openModal() {
+    if (card.classList.contains("is-unlocked")) return; // real link takes over once live
+    lastFocused = document.activeElement;
+    overlay.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+    if (closeBtn) closeBtn.focus();
+    document.addEventListener("keydown", onKeydown);
+  }
+
+  function closeModal() {
+    overlay.classList.remove("is-open");
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onKeydown);
+    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+  }
+
+  function onKeydown(event) {
+    if (event.key === "Escape") closeModal();
+  }
+
+  // Clicking anywhere on the card opens the preview...
+  card.addEventListener("click", (event) => {
+    if (event.target.closest("a")) return; // ...unless it's already a real link
+    openModal();
+  });
+
+  // ...and the button works on its own too, for keyboard/screen-reader users.
+  if (trigger) {
+    trigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openModal();
+    });
+  }
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) closeModal();
+  });
+
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
 }
